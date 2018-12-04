@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Earthquakes</title>
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+          integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/style.min.css?2018-12-01" rel="stylesheet">
+
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+</head>
+<body>
+<div class="ui menu">
+    <div class="header item">
+        Earthquakes
+    </div>
+    <a class="item" href="https://earthquake.usgs.gov/fdsnws/event/1/">
+        Data Source
+    </a>
+    <div class="right menu">
+        <div class="item" id="refresh-status">Refreshing...</div>
+        <a class="item" id="refresh" href="#">
+            <i class="material-icons">refresh</i>
+        </a>
+        <a class="account item">
+            <i class="material-icons">account_circle</i>
+            <span id="username">Not signed in</span>
+            <i class="dropdown icon"></i>
+        </a>
+        <div class="ui fluid popup transition hidden">
+            <div class="ui top left attached label" id="secure-status">?</div>
+            <div class="ui bottom attached label" id="auth-status">?</div>
+            <form id="auth" class="ui form" action="/user" method="post">
+                <div class="field">
+                    <label>Username</label>
+                    <input type="text" name="username" required placeholder="Username">
+                </div>
+                <div class="field">
+                    <label>Password <i class="right floated">min. 6 characters</i></label>
+                    <input type="password" name="password" required placeholder="Password">
+                </div>
+                <div class="field">
+                    <button class="ui secondary button" type="submit" name="action" value="create">Create Account</button>
+                    <button class="ui primary button" type="submit" name="action" value="login">Login</button>
+                    <button class="ui red button" type="submit" name="action" value="logout" disabled>Logout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="ui grid container">
+
+    <div class="row stackable">
+        <div class="five wide column">
+            <div class="ui piled segments">
+                <div class="ui center aligned segment">
+                    <h2 class="ui header">The next earthquake will be</h2>
+                    <div class="ui massive buttons">
+                        <button class="ui negative button" name="guess" value="-1">Lower</button>
+                        <div class="or"></div>
+                        <button class="ui positive button" name="guess" value="1">Higher</button>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <h4 class="ui header">How to Play</h4>
+                    <p>The latest earthquake is listed below. Do you think the next one will have a higher or lower
+                        magnitude than the current latest? Submit your guess above and see the results later. You can
+                        change your answer up until the final result is determined. You need to be signed in to play.
+                        Good luck!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="eight wide column">
+            <h1 class="ui dividing header">Your Recent History
+                <span class="ui label" id="game-score">Score<span class="detail">?</span></span>
+            </h1>
+            <table id="history" class="ui unstackable celled table">
+                <thead>
+                <tr>
+                    <th title="This is the one that the guess is based off of">Earthquake</th>
+                    <th title="The time the earthquake occurred at">Time</th>
+                    <th>Result</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="three wide column">
+            <h1 class="ui dividing header">Leaderboard</h1>
+            <table id="leaderboard" class="ui unstackable celled table">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <h1 class="ui dividing header">Last 500 Earthquakes
+                <span class="ui label" id="quake-latest">Latest<span class="detail">?</span></span>
+            </h1>
+            <div class="ui stackable grid">
+                <div class="eleven wide column">
+                    <div id="quake-map"></div>
+                </div>
+                <div class="five wide column">
+                    <div id="quake-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script crossorigin="anonymous" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script crossorigin="anonymous" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI="
+        src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script crossorigin="anonymous" integrity="sha256-yICXHX3uUb4vhDwkz3XGtdQIjf/Hfm3IhPk0Snldjwk="
+        src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.42.5/plotly.min.js"></script>
+<script crossorigin="anonymous" integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k="
+        src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script crossorigin="anonymous" integrity="sha256-AJvwDTgx+2JZWtsg4XDtKI2KFXST+2AosYiLBYde2PM="
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+<script src="js/visualizations.min.js?v=2018-11-28"></script>
+<script src="js/auth.min.js?v=2018-12-01"></script>
+<script src="js/game.min.js?v=2018-11-28"></script>
+<script src="js/site.min.js?v=2018-11-28"></script>
+</body>
+</html>
