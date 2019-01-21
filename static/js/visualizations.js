@@ -1,9 +1,12 @@
 /*globals TimelineLite, Power2, Bounce*/
 
 function Visualizations() {
-    Plotly.setPlotConfig({
-        mapboxAccessToken: "REPLACE_WITH_MAPBOX_TOKEN"
+    $.get("./mapbox", function (data) {
+        Plotly.setPlotConfig({
+            mapboxAccessToken: data.token
+        });
     });
+
     
     this.magColor = {0: "black", 1: "red", 2: "orange", 3: "yellow", 4: "green", 5: "blue", 6: "indigo", 7: "violet"};
 }
@@ -86,7 +89,5 @@ Visualizations.prototype.drawChart = function (rawData) {
 Visualizations.prototype.indicateLatest = function (rawData) {
     var quake = rawData[0],
         date = moment(quake.time).format('MMMM Do YYYY [at] h:mm:ss a');
-    $("#quake-latest .detail")
-        .text( quake.name + " on " + date);
-        //.css("background-color", this.magColor[Math.round(quake)]);  
+    $("#quake-latest .detail").text( quake.name + " on " + date);
 };

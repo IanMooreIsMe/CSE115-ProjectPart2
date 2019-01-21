@@ -2,14 +2,14 @@
 Final project for CSE115 at UB. 
 
 A website that visualizes data about the 500 most recent earthquakes 
-and implements a fun game where users guess if the next one will have a higher or lower magnitude.
+and implements a fun game where users guess if the next one will have 
+a higher or lower magnitude.
 
 ## How to Setup
 
 1. Install the requirements in requirements.txt
-2. Replace REPLACE_WITH_MAPBOX_TOKEN in visualizations.js with your token
-3. Minify the .js and .css
-4. Start server.py
+2. Rename config.example.cfg to config.cfg and replace the values
+3. Start server.py
 
 ## Requirements
 - [x] Choose a data source that you access through a web API

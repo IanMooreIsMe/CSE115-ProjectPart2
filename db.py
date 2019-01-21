@@ -48,7 +48,7 @@ def initialize_db(cur):
         "Guess int NOT NULL,"
         "Correct boolean,"  # later evaluted
         "PRIMARY KEY (UserID, QuakeID),"  # a composite primary key to allow only one guess
-        "FOREIGN KEY(UserID) REFERENCES User(UserID),"
-        "FOREIGN KEY(QuakeID) REFERENCES Quake(QuakeID)"
+        "FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE ON UPDATE CASCADE,"
+        "FOREIGN KEY (QuakeID) REFERENCES Quake(QuakeID) ON DELETE CASCADE ON UPDATE CASCADE"
         ")"
     )

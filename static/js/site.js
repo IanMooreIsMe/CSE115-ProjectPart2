@@ -18,7 +18,7 @@ $(document).ready(function () {
             }
         });
     game = new Game();
-    visualizations = new Visualizations([game]);
+    visualizations = new Visualizations();
     auth = new Auth("form#auth");
     refresher = new Refresher();
 });

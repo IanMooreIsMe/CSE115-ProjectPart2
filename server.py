@@ -12,8 +12,10 @@ import quakes
 import db
 import auth
 import game
+import configparser
 
 routes = web.RouteTableDef()
+config = configparser.ConfigParser()
 
 @routes.get("/")
 async def index(request):
@@ -93,10 +95,19 @@ async def quakes_api(request):
     else:
         raise web.HTTPTooManyRequests
 
+@routes.get("/mapbox")
+async def mapbox_token(request):
+    """Returns the mapbox token from the config"""
+    mapbox = config["mapbox"]
+    return web.json_response({
+        "token": mapbox["token"]
+    })
+
 
 def make_app():
     """Neatly creates the webapp"""
     app = web.Application()
+    config.read("config.cfg")
     fernet_key = fernet.Fernet.generate_key()
     secret_key = base64.urlsafe_b64decode(fernet_key)
     setup(app, EncryptedCookieStorage(secret_key, cookie_name="session"))
